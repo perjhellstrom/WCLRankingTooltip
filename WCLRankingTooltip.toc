@@ -6,7 +6,7 @@
 ## Notes: Shows WarcraftLogs rankings in player tooltips.
 ## Author: Spyer-Benediction, Discord: Kikootwo
 ## Version: @project-version@
-## X-Curse-Project-ID: XXX
+## X-Curse-Project-ID: 980743
 ## SavedVariables: WCLRT_Settings
 
 
