@@ -9,6 +9,5 @@
 ## X-Curse-Project-ID: 980743
 ## SavedVariables: WCLRT_Settings
 
-
-WCLRankingTooltip.lua
 PlayerDB\DB.lua
+WCLRankingTooltip.lua
