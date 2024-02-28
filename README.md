@@ -11,7 +11,7 @@ WCL Ranking Tooltip is a World of Warcraft addon designed for the Classic versio
 
 ## Installation
 
-1. **Download the Addon:** Download the latest release from the [Releases](#) page.
+1. **Download the Addon:** Download the latest release from the [Releases](https://github.com/kikootwo/WCLRankingTooltip/releases) page.
 2. **Extract the ZIP File:** Unzip the downloaded file into your World of Warcraft `_classic_/Interface/AddOns` directory.
 3. **Verify Installation:** Launch World of Warcraft Classic, and from the character select screen, click on "AddOns" to ensure "WCL Ranking Tooltip" is listed and enabled.
 
@@ -31,7 +31,7 @@ The addon includes an options pane located in the WoW Interface options menu. He
 
 Contributions to "WCL Ranking Tooltip" are welcome! Whether it's feature suggestions, bug reports, or code contributions, please feel free to:
 
-- **Report Issues and Suggestions:** Use the [Issues](#) tab in GitHub to report bugs or suggest features.
+- **Report Issues and Suggestions:** Use the [Issues](https://github.com/kikootwo/WCLRankingTooltip/issues) tab in GitHub to report bugs or suggest features.
 - **Submit Pull Requests:** If you'd like to contribute to the codebase, submit a pull request with your proposed changes for review.
 
 ## License
