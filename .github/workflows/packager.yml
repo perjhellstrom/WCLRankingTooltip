@@ -1,0 +1,57 @@
+name: Package and Deploy Addon
+
+on:
+  workflow_dispatch:
+    inputs:
+      versionType:
+        description: 'Version bump type (major, minor, patch)'
+        required: true
+        default: 'minor'
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Fetches all history for all tags and branches
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Calculate new version and create tag
+        id: new_version
+        run: |
+          VERSION_TYPE=${{ github.event.inputs.versionType || 'minor' }}
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          NEW_VERSION=$(python .github/scripts/calculate_new_version.py "$LATEST_TAG" "$VERSION_TYPE")
+          echo "New Version: $NEW_VERSION"
+          git tag "$NEW_VERSION"
+          git push origin "$NEW_VERSION"
+          echo "::set-output name=NEW_VERSION::$NEW_VERSION"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create and deploy packages
+        uses: BigWigsMods/packager@v2
+        with:
+          args: -S
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}

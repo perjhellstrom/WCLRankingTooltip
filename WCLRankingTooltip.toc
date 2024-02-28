@@ -1,0 +1,14 @@
+## Interface: 30403
+## Interface-Retail: 100205
+## Interface-Classic: 11501
+## Interface-Wrath: 30403
+## Title: WCL Ranking Tooltip
+## Notes: Shows WarcraftLogs rankings in player tooltips.
+## Author: Spyer-Benediction, Discord: Kikootwo
+## Version: @project-version@
+## X-Curse-Project-ID: XXX
+## SavedVariables: WCLRT_Settings
+
+
+WCLRankingTooltip.lua
+PlayerDB\DB.lua
