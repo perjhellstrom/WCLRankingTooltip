@@ -331,7 +331,6 @@ end
 
 local thisRealm = GetRealmName()
 wclData = PlayerDB[thisRealm]
-print(wclData['Lightspyer']['p'])
 if not wclData then
     print('WCL Ranking Tooltip is not currently available on ' .. thisRealm ..  '. Contact the developer for more information. Discord: kikootwo')
     return
