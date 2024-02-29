@@ -208,15 +208,7 @@ end
 -- Using the same styling/icons as for the tooltip
 local function UpdateWCLDataDisplay()
     if not WCLDataDisplayFrame then return end  -- If the frame doesn't exist, bail out
-    local name, realm = UnitName("player")
-    -- Check if the player is from the same realm. Adjust if necessary for cross-realm.
-    if realm == nil or realm == "" then
-        realm = GetRealmName()
-    end
-
-	if realm ~= 'Benediction' then
-		return
-	end
+    local name, _ = UnitName("player")
 
     local data = wclData[name]
     if data then
@@ -231,7 +223,7 @@ local function UpdateInspectWCLDataDisplay()
     local unit = InspectFrame.unit
     if not unit then return end  -- If for some reason the unit isn't set, bail out
 
-    local name, realm = UnitName(unit)
+    local name, _ = UnitName(unit)
     -- Assuming playerData is structured with realm names, you might need to adjust for players on different realms
 
     -- Fetch the player's data
@@ -313,7 +305,7 @@ local function UpdateSettingsWithDefaults()
     end
 end
 
-local thisRealm = GetRealmName()
+thisRealm = GetRealmName()
 wclData = PlayerDB[thisRealm]
 if not wclData then
     print('WCL Ranking Tooltip is not currently available on ' .. thisRealm ..  '. Contact the developer for more information. Discord: kikootwo')
