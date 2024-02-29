@@ -25,6 +25,11 @@ local classColors = {
     WARRIOR = {r = 199, g = 156, b = 110},
 }
 
+local possibleStars = {
+    ["Benediction"] = 1080,
+    ["Crusader Strike"] = 720,
+}
+
 -- Function to retrieve the class color
 local function GetClassColor(className)
     local color = classColors[className]
@@ -127,7 +132,7 @@ local function GetFormattedText(data, class, separator, tooltip)
     -- Get the color for the parse percentage and rank percentage
     local parseColor = GetSmoothGradientColor(data.p)
     local rankColor = GetSmoothGradientColor(data.r)
-    local starsColor = GetSmoothGradientColor((data.a / 1080) * 100)
+    local starsColor = GetSmoothGradientColor((data.a / possibleStars[thisRealm]) * 100)
     local classColor = GetClassColor(class)
 
     -- Convert color object to WoW's color string format
@@ -186,31 +191,10 @@ local function GetFormattedText(data, class, separator, tooltip)
 
 
     return string.format("%s %s%s%s", specDisplay, displayTextParse, displayTextStars, displayTextRank)
-    -- if tooltip then
-    --     if WCLRT_Settings["TooltipSpecDisplay"] == 1 then
-    --         return string.format("|T%s:0|t %s%s%s", specIconPath, displayTextParse, displayTextStars, displayTextRank)
-    --     else
-    --         return string.format("%s  %s%s%s", displayTextClass, displayTextParse, displayTextStars, displayTextRank)
-    --     end
-    -- else
-    --     if WCLRT_Settings["PaneSpecDisplay"] == 1 then
-    --         return string.format("|T%s:0|t %s%s%s%s%s", specIconPath, displayTextParse, separator, displayTextStars, separator, displayTextRank)
-    --     else
-    --         return string.format("%s  %s%s%s%s%s", displayTextClass, displayTextParse, separator, displayTextStars, separator, displayTextRank)
-    --     end
-    -- end
 end
 
 local function AddPlayerDataToTooltip(unit)
-    local name, realm = UnitName(unit)
-    -- Check if the player is from the same realm. Adjust if necessary for cross-realm.
-    if realm == nil or realm == "" then
-        realm = GetRealmName()
-    end
-
-	if realm ~= 'Benediction' then
-		return
-	end
+    local name, _ = UnitName(unit)
 
     -- Retrieve player data from the database
     local _, classFilename = UnitClass(unit)

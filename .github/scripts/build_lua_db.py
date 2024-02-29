@@ -1,6 +1,6 @@
 import re
 import json
-
+import os
 
 def parse_lua_to_dict(lua_file):
     pattern = r'\["(.*?)"\] = {p = (.*?), a = (.*?), s = "(.*?)", r = (.*?), k = (.*?)},'
@@ -40,9 +40,10 @@ def update_or_insert_player(players, player_data, stats):
     players[name] = new_data
 
 
-def write_dict_to_lua(players, lua_file):
+def write_dict_to_lua(players, lua_file, processed_server_name):
     with open(lua_file, 'w', encoding='utf-8') as outfile:
-        outfile.write("playerData = {\n")
+        outfile.write("if not PlayerDB then PlayerDB = {} end\n")
+        outfile.write(f"PlayerDB['{processed_server_name}'] = " + "{\n")
         for name, data in sorted(players.items(), key=lambda x: x[0]):
             p_value = data['p'] if data['p'] != 'nil' else 'nil'
             outfile.write(f'  ["{name}"] = {{p = {p_value}, a = {data["a"]}, s = "{data["s"]}", r = {data["r"]}, k = {data["k"]}}},\n')
@@ -59,7 +60,7 @@ def preprocess_data_file(data_file):
     return latest_entries.values()
 
 
-def main(data_file, lua_file):
+def main(data_file, lua_file, processed_server_name):
     players = parse_lua_to_dict(lua_file)
     stats = {'added': 0, 'updated': 0}
 
@@ -67,10 +68,32 @@ def main(data_file, lua_file):
     for player_data in latest_player_data:
         update_or_insert_player(players, player_data, stats)
 
-    write_dict_to_lua(players, lua_file)
+    write_dict_to_lua(players, lua_file, processed_server_name)
+    print(f"Server: {processed_server_name}")
     print(f"Players added: {stats['added']}")
     print(f"Players updated: {stats['updated']}")
 
 
 # Adjust 'data_file.txt' and 'output.lua' with your actual file paths
-main('../datafile.txt', '../../PlayerDB/DB.lua')
+servers = {
+    5068: 'Benediction',
+    10218: 'Crusader Strike'
+}
+# Get a list of all files in the 'datafiles' directory
+data_files = os.listdir('../datafiles')
+
+# Loop over each file in the directory
+for curr_data_file in data_files:
+
+    # Extract the server id from the filename using regex
+    server_id = re.search(r'_(\d+)\.txt$', curr_data_file)
+    if server_id:
+        server_id = int(server_id.group(1))
+        # Get the server name from the servers dictionary
+        server_name = servers.get(server_id)
+        if server_name:
+            # Construct the lua file path using the server name
+            lua_file_path = f'../../PlayerDB/{server_name}_DB.lua'
+            print(f"Processing {curr_data_file} -> {lua_file_path}")
+            # Call the main function for each data file
+            main(f"../datafiles/{curr_data_file}", lua_file_path, server_name)

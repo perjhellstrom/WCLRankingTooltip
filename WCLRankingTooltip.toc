@@ -1,5 +1,4 @@
 ## Interface: 30403
-## Interface-Retail: 100205
 ## Interface-Classic: 11501
 ## Interface-Wrath: 30403
 ## Title: WCL Ranking Tooltip
@@ -9,5 +8,11 @@
 ## X-Curse-Project-ID: 980743
 ## SavedVariables: WCLRT_Settings
 
-PlayerDB\DB.lua
+#@wrath
+# PlayerDB\Benediction_DB.lua
+#@end
+
+#@classic
+# PlayerDB\Crusader Strike_DB.lua
+#@end
 WCLRankingTooltip.lua
