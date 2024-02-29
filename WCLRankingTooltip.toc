@@ -8,11 +8,13 @@
 ## X-Curse-Project-ID: 980743
 ## SavedVariables: WCLRT_Settings
 
-#@wrath
-# PlayerDB\Benediction_DB.lua
-#@end
-
-#@classic
+#@non-retail@
+# #@version-classic@
 # PlayerDB\Crusader Strike_DB.lua
-#@end
+# #@end-version-classic@
+# #@version-wrath@
+# PlayerDB\Benediction_DB.lua
+# #@end-version-wrath@
+#@end-non-retail@
+
 WCLRankingTooltip.lua
