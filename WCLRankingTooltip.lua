@@ -401,9 +401,22 @@ panel:SetScript("OnShow", function()
         local title = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
         title:SetPoint("TOPLEFT", 16, -16)
         title:SetText(panel.name .. " v" .. addonVersion)
+        local freshness = nil
+        if wclData["data_freshness"] then
+            freshness = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
+            freshness:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -20)
+            freshness:SetText(thisRealm .. " Data Last Updated: " .. wclData["data_freshness"])
+        end
+
+        local anchor = nil
+        if freshness then
+            anchor = freshness
+        else
+            anchor = title
+        end
 
         local tooltipGroupLabel = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        tooltipGroupLabel:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -20)
+        tooltipGroupLabel:SetPoint("TOPLEFT", anchor, "BOTTOMLEFT", 0, -20)
         tooltipGroupLabel:SetText("Tooltip Options")
 
         local tooltip_checkbox1 = CreateCheckbox(panel, "Show Average Parse Percentage in Tooltip", "tooltip_WCLRT-AvgParse", "TooltipAvgParse", tooltipGroupLabel, "TOPLEFT", "BOTTOMLEFT", 0, -15)

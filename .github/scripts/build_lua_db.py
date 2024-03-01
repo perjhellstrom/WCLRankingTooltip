@@ -1,7 +1,7 @@
 import re
 import json
 import os
-
+from datetime import datetime
 def parse_lua_to_dict(lua_file):
     pattern = r'\["(.*?)"\] = {p = (.*?), a = (.*?), s = "(.*?)", r = (.*?), k = (.*?)},'
     players = {}
@@ -44,6 +44,8 @@ def write_dict_to_lua(players, lua_file, processed_server_name):
     with open(lua_file, 'w', encoding='utf-8') as outfile:
         outfile.write("if not PlayerDB then PlayerDB = {} end\n")
         outfile.write(f"PlayerDB['{processed_server_name}'] = " + "{\n")
+        outfile.write(
+            f'  ["data_freshness"] = \"{datetime.now().strftime("%Y-%m-%d %I:%M %p")}\",\n')
         for name, data in sorted(players.items(), key=lambda x: x[0]):
             p_value = data['p'] if data['p'] != 'nil' else 'nil'
             outfile.write(f'  ["{name}"] = {{p = {p_value}, a = {data["a"]}, s = "{data["s"]}", r = {data["r"]}, k = {data["k"]}}},\n')
