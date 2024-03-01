@@ -1,3 +1,11 @@
+# CURRENTLY SUPPORTED SERVERS - US ONLY
+- **Classic Wrath - Benediction**
+- **Classic Wrath - Faerlina**
+- **SOD - Crusader Strike**
+- **SOD - Lone Wolf**
+- **SOD - Living Flame**
+- **SOD - Wild Growth**
+
 # WCL Ranking Tooltip
 
 WCL Ranking Tooltip is a World of Warcraft addon designed for the Classic version, enhancing player tooltips by displaying WarcraftLogs data directly in-game for the Benediction server. It provides players with quick insights into rankings, performance metrics, and other key statistics, all without leaving the game environment.
@@ -5,7 +13,6 @@ WCL Ranking Tooltip is a World of Warcraft addon designed for the Classic versio
 ## Features
 
 - **Tooltip Enhancement:** Adds a line to player tooltips showing Parse Percentage, All-Star Points, and Spec (or Spec Icon), with class color coding.
-- **Benediction Server Data:** Currently supports loading performance data specifically for the Benediction server.
 - **Customizable Display:** Options pane allows users to toggle the display of verbose data and select their preferred data points.
 - **Future-Proof:** Designed with extensibility in mind to support additional servers and data points in future versions.
 
