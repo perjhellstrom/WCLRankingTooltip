@@ -25,10 +25,15 @@ local classColors = {
     WARRIOR = {r = 199, g = 156, b = 110},
 }
 
-local possibleStars = {
-    ["Benediction"] = 1080,
-    ["Crusader Strike"] = 720,
-}
+local possibleStars = 0
+
+if WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC then
+	-- wrath
+    possibleStars = 1080
+elseif WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+	-- vanilla
+    possibleStars = 720
+end
 
 -- Function to retrieve the class color
 local function GetClassColor(className)
@@ -41,57 +46,57 @@ local function GetClassColor(className)
     end
 end
 
-local function GetSpecIconPath(spec, class)
-    local specIconPaths = {
-        -- Death Knight
-        ["Blood_DEATHKNIGHT"] = "Interface\\Icons\\spell_deathknight_bloodpresence",
-        ["BloodDPS_DEATHKNIGHT"] = "Interface\\Icons\\inv_weapon_shortblade_40",
-        ["Frost_DEATHKNIGHT"] = "Interface\\Icons\\spell_frost_arcticwinds",
-        ["Unholy_DEATHKNIGHT"] = "Interface\\Icons\\spell_deathknight_unholypresence",
-        ["Runeblade_DEATHKNIGHT"] = "Interface\\Icons\\spell_deathknight_darkconviction",
-        ["Lichborne_DEATHKNIGHT"] = "Interface\\Icons\\spell_shadow_raisedead",
-        -- Druid
-        ["Balance_DRUID"] = "Interface\\Icons\\spell_nature_starfall",
-        ["Feral_DRUID"] = "Interface\\Icons\\ability_druid_catform",
-        ["Restoration_DRUID"] = "Interface\\Icons\\spell_nature_healingtouch",
-        ["Guardian_DRUID"] = "Interface\\Icons\\ability_racial_bearform",
-        ["Warden_DRUID"] = "Interface\\Icons\\ability_druid_predatoryinstincts",
-        -- Hunter
-        ["BeastMastery_HUNTER"] = "Interface\\Icons\\ability_hunter_beasttaming",
-        ["Marksmanship_HUNTER"] = "Interface\\Icons\\ability_marksmanship",
-        ["Survival_HUNTER"] = "Interface\\Icons\\ability_hunter_swiftstrike",
-        -- Mage
-        ["Arcane_MAGE"] = "Interface\\Icons\\spell_holy_magicalsentry",
-        ["Fire_MAGE"] = "Interface\\Icons\\spell_fire_firebolt02",
-        ["Frost_MAGE"] = "Interface\\Icons\\spell_frost_frostbolt02",
-        -- Paladin
-        ["Holy_PALADIN"] = "Interface\\Icons\\spell_holy_holybolt",
-        ["Protection_PALADIN"] = "Interface\\Icons\\spell_holy_devotionaura",
-        ["Retribution_PALADIN"] = "Interface\\Icons\\spell_holy_auraoflight",
-        ["Justicar_PALADIN"] = "Interface\\Icons\\spell_holy_divineintervention",
-        -- Priest
-        ["Discipline_PRIEST"] = "Interface\\Icons\\spell_holy_powerwordshield",
-        ["Holy_PRIEST"] = "Interface\\Icons\\spell_holy_guardianspirit",
-        ["Shadow_PRIEST"] = "Interface\\Icons\\spell_shadow_shadowwordpain",
-        -- Rogue
-        ["Assassination_ROGUE"] = "Interface\\Icons\\ability_rogue_eviscerate",
-        ["Combat_ROGUE"] = "Interface\\Icons\\ability_backstab",
-        ["Subtlety_ROGUE"] = "Interface\\Icons\\ability_stealth",
-        -- Shaman
-        ["Elemental_SHAMAN"] = "Interface\\Icons\\spell_nature_lightning",
-        ["Enhancement_SHAMAN"] = "Interface\\Icons\\spell_shaman_improvedstormstrike",
-        ["Restoration_SHAMAN"] = "Interface\\Icons\\spell_nature_magicimmunity",
-        -- Warlock
-        ["Affliction_WARLOCK"] = "Interface\\Icons\\spell_shadow_deathcoil",
-        ["Demonology_WARLOCK"] = "Interface\\Icons\\spell_shadow_metamorphosis",
-        ["Destruction_WARLOCK"] = "Interface\\Icons\\spell_shadow_rainoffire",
-        -- Warrior
-        ["Arms_WARRIOR"] = "Interface\\Icons\\ability_warrior_savageblow",
-        ["Fury_WARRIOR"] = "Interface\\Icons\\ability_warrior_innerrage",
-        ["Protection_WARRIOR"] = "Interface\\Icons\\ability_warrior_defensivestance",
-        ["Gladiator_WARRIOR"] = "Interface\\Icons\\ability_warrior_improveddisciplines",
-    }
+local specIconPaths = {
+    -- Death Knight
+    ["Blood_DEATHKNIGHT"] = "Interface\\Icons\\spell_deathknight_bloodpresence",
+    ["BloodDPS_DEATHKNIGHT"] = "Interface\\Icons\\inv_weapon_shortblade_40",
+    ["Frost_DEATHKNIGHT"] = "Interface\\Icons\\spell_frost_arcticwinds",
+    ["Unholy_DEATHKNIGHT"] = "Interface\\Icons\\spell_deathknight_unholypresence",
+    ["Runeblade_DEATHKNIGHT"] = "Interface\\Icons\\spell_deathknight_darkconviction",
+    ["Lichborne_DEATHKNIGHT"] = "Interface\\Icons\\spell_shadow_raisedead",
+    -- Druid
+    ["Balance_DRUID"] = "Interface\\Icons\\spell_nature_starfall",
+    ["Feral_DRUID"] = "Interface\\Icons\\ability_druid_catform",
+    ["Restoration_DRUID"] = "Interface\\Icons\\spell_nature_healingtouch",
+    ["Guardian_DRUID"] = "Interface\\Icons\\ability_racial_bearform",
+    ["Warden_DRUID"] = "Interface\\Icons\\ability_druid_predatoryinstincts",
+    -- Hunter
+    ["BeastMastery_HUNTER"] = "Interface\\Icons\\ability_hunter_beasttaming",
+    ["Marksmanship_HUNTER"] = "Interface\\Icons\\ability_marksmanship",
+    ["Survival_HUNTER"] = "Interface\\Icons\\ability_hunter_swiftstrike",
+    -- Mage
+    ["Arcane_MAGE"] = "Interface\\Icons\\spell_holy_magicalsentry",
+    ["Fire_MAGE"] = "Interface\\Icons\\spell_fire_firebolt02",
+    ["Frost_MAGE"] = "Interface\\Icons\\spell_frost_frostbolt02",
+    -- Paladin
+    ["Holy_PALADIN"] = "Interface\\Icons\\spell_holy_holybolt",
+    ["Protection_PALADIN"] = "Interface\\Icons\\spell_holy_devotionaura",
+    ["Retribution_PALADIN"] = "Interface\\Icons\\spell_holy_auraoflight",
+    ["Justicar_PALADIN"] = "Interface\\Icons\\spell_holy_divineintervention",
+    -- Priest
+    ["Discipline_PRIEST"] = "Interface\\Icons\\spell_holy_powerwordshield",
+    ["Holy_PRIEST"] = "Interface\\Icons\\spell_holy_guardianspirit",
+    ["Shadow_PRIEST"] = "Interface\\Icons\\spell_shadow_shadowwordpain",
+    -- Rogue
+    ["Assassination_ROGUE"] = "Interface\\Icons\\ability_rogue_eviscerate",
+    ["Combat_ROGUE"] = "Interface\\Icons\\ability_backstab",
+    ["Subtlety_ROGUE"] = "Interface\\Icons\\ability_stealth",
+    -- Shaman
+    ["Elemental_SHAMAN"] = "Interface\\Icons\\spell_nature_lightning",
+    ["Enhancement_SHAMAN"] = "Interface\\Icons\\spell_shaman_improvedstormstrike",
+    ["Restoration_SHAMAN"] = "Interface\\Icons\\spell_nature_magicimmunity",
+    -- Warlock
+    ["Affliction_WARLOCK"] = "Interface\\Icons\\spell_shadow_deathcoil",
+    ["Demonology_WARLOCK"] = "Interface\\Icons\\spell_shadow_metamorphosis",
+    ["Destruction_WARLOCK"] = "Interface\\Icons\\spell_shadow_rainoffire",
+    -- Warrior
+    ["Arms_WARRIOR"] = "Interface\\Icons\\ability_warrior_savageblow",
+    ["Fury_WARRIOR"] = "Interface\\Icons\\ability_warrior_innerrage",
+    ["Protection_WARRIOR"] = "Interface\\Icons\\ability_warrior_defensivestance",
+    ["Gladiator_WARRIOR"] = "Interface\\Icons\\ability_warrior_improveddisciplines",
+}
 
+local function GetSpecIconPath(spec, class)
     -- Default to a generic question mark icon if the spec-class combo is not found
     return specIconPaths[spec .. '_' .. class] or "Interface\\Icons\\inv_misc_questionmark"
 end
@@ -105,10 +110,11 @@ end
 
 local function GetSmoothGradientColor(value)
     local colorRanges = {
-        {0, 25, {102, 102, 102}, {30, 255, 0}},   -- Gray to Green
-        {25, 50, {30, 255, 0}, {0, 112, 255}},    -- Green to Blue
-        {50, 75, {0, 112, 255}, {163, 53, 238}},  -- Blue to Purple
-        {75, 99.5, {163, 53, 238}, {226, 104, 168}} -- Purple to Pink
+        {0, 25, {102, 102, 102}, {30, 255, 0}},    -- Gray to Green
+        {25, 50, {30, 255, 0}, {0, 112, 255}},     -- Green to Blue
+        {50, 75, {0, 112, 255}, {163, 53, 238}},   -- Blue to Purple
+        {75, 95, {163, 53, 238}, {255, 128, 0}},   -- Purple to Orange
+        {95, 99, {255, 128, 0}, {226, 104, 168}}   -- Orange to Pink
     }
     local specialColor = {229, 204, 128}  -- Special color for value 100
 
@@ -132,7 +138,7 @@ local function GetFormattedText(data, class, separator, tooltip)
     -- Get the color for the parse percentage and rank percentage
     local parseColor = GetSmoothGradientColor(data.p)
     local rankColor = GetSmoothGradientColor(data.r)
-    local starsColor = GetSmoothGradientColor((data.a / possibleStars[thisRealm]) * 100)
+    local starsColor = GetSmoothGradientColor((data.a / possibleStars) * 100)
     local classColor = GetClassColor(class)
 
     -- Convert color object to WoW's color string format

@@ -77,7 +77,11 @@ def main(data_file, lua_file, processed_server_name):
 # Adjust 'data_file.txt' and 'output.lua' with your actual file paths
 servers = {
     5068: 'Benediction',
-    10218: 'Crusader Strike'
+    10218: 'Crusader Strike',
+    5003: 'Faerlina',
+    10220: 'Living Flame',
+    10221: 'Lone Wolf',
+    10222: 'Wild Growth'
 }
 # Get a list of all files in the 'datafiles' directory
 data_files = os.listdir('../datafiles')
