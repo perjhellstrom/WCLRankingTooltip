@@ -12,8 +12,8 @@
 # #@version-classic@
 # PlayerDB\Crusader Strike_DB.lua
 # PlayerDB\Lone Wolf_DB.lua
-# PlayerDB\Wild Growth.lua
-# PlayerDB\Living Flame.lua
+# PlayerDB\Wild Growth_DB.lua
+# PlayerDB\Living Flame_DB.lua
 # #@end-version-classic@
 # #@version-wrath@
 # PlayerDB\Benediction_DB.lua
