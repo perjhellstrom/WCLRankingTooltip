@@ -245,10 +245,10 @@ end
 
 local function SetUpWCLDataDisplayFrame()
     -- Proceed to set up your frame now that CharacterFrameInsetRight should exist
-    local WCLDataDisplayFrame = CreateFrame("Frame", "WCLDataDisplayFrame", CharacterFrame)
+    local WCLDataDisplayFrame = CreateFrame("Frame", "WCLDataDisplayFrame", PaperDollItemsFrame)
     WCLDataDisplayFrame:SetSize(200, 50)  -- Adjust the size as needed
-    WCLDataDisplayFrame:SetPoint("TOP", CharacterFrame, "TOP", 0, -190)  -- Adjust positioning as needed
-    WCLDataDisplayFrame:SetPoint("LEFT", CharacterFrame, "LEFT", 70, 0)  -- Adjust positioning as needed
+    WCLDataDisplayFrame:SetPoint("TOP", PaperDollItemsFrame, "TOP", 0, -190)  -- Adjust positioning as needed
+    WCLDataDisplayFrame:SetPoint("LEFT", PaperDollItemsFrame, "LEFT", 70, 0)  -- Adjust positioning as needed
 
     WCLDataDisplayFrame:Hide()
 
@@ -260,7 +260,7 @@ local function SetUpWCLDataDisplayFrame()
 
 
     -- Show and update the data display frame when the character stats frame is shown
-    CharacterFrame:HookScript("OnShow", function()
+    PaperDollItemsFrame:HookScript("OnShow", function()
         UpdateWCLDataDisplay()
         WCLDataDisplayFrame:Show()
     end)
