@@ -43,3 +43,4 @@ luac.out
 *.hex
 
 /.github/datafiles/
+.github/scripts/build_lua_db.py
