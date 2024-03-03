@@ -44,3 +44,4 @@ luac.out
 
 /.github/datafiles/
 .github/scripts/build_lua_db.py
+.github/scripts/find_oldest_data.py
