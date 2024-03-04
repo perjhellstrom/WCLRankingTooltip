@@ -109,6 +109,9 @@ local function InterpolateColor(color1, color2, factor)
 end
 
 local function GetSmoothGradientColor(value)
+    if not value then
+        return {255, 255, 255}
+    end
     local colorRanges = {
         {0, 25, {102, 102, 102}, {30, 255, 0}},    -- Gray to Green
         {25, 50, {30, 255, 0}, {0, 112, 255}},     -- Green to Blue
@@ -133,24 +136,49 @@ local function GetSmoothGradientColor(value)
     return {0, 0, 0}  -- Fallback color
 end
 
+local function ParseProgressString(progressString)
+    local parts = {strsplit(" ", progressString)}
+    if #parts ~= 2 then
+        return nil, "Invalid format"
+    end
+
+    local progressPart = parts[1]
+    local completed, total = strmatch(progressPart, "(%d+)/(%d+)")
+
+    if completed and total then
+        completed = tonumber(completed)
+        total = tonumber(total)
+        if total == 0 then
+            return nil, "Total cannot be zero"
+        end
+        return (completed / total) * 100
+    else
+        return nil, "Invalid progress format"
+    end
+end
+
 local function GetFormattedText(data, class, separator, tooltip)
+    local progressPercent = ParseProgressString(data.o)
     local specIconPath = GetSpecIconPath(data.s, class)
     -- Get the color for the parse percentage and rank percentage
     local parseColor = GetSmoothGradientColor(data.p)
     local rankColor = GetSmoothGradientColor(data.r)
     local starsColor = GetSmoothGradientColor((data.a / possibleStars) * 100)
     local classColor = GetClassColor(class)
+    local progressColor = GetSmoothGradientColor(progressPercent)
 
     -- Convert color object to WoW's color string format
     local parseColorString = string.format("|cFF%02x%02x%02x", parseColor[1], parseColor[2], parseColor[3])
     local rankColorString = string.format("|cff%02x%02x%02x", rankColor[1], rankColor[2], rankColor[3])
     local starsColorString = string.format("|cff%02x%02x%02x", starsColor[1], starsColor[2], starsColor[3])
     local classColorString = string.format("|cff%02x%02x%02x", classColor.r, classColor.g, classColor.b)
+    local progressColorString = string.format("|cff%02x%02x%02x", progressColor[1], progressColor[2], progressColor[3])
 
     -- Formatting the displayed text with color
     local displayTextParse = string.format("%sAvg: %d%%|r%s", parseColorString, data.p, separator)
     local displayTextRank = string.format("%sRank: %d|r%s", rankColorString, data.k, separator)
     local displayTextStars = string.format("%sAll Stars: %d|r%s", starsColorString, data.a, separator)
+    local displayTextProgress = string.format("%sExp: %s|r%s", progressColorString, data.o, separator)
     local displayTextClass = string.format("%s%s|r ", classColorString, data.s)
     local displayTextSpec = string.format("|T%s:0|t", specIconPath)
     local specDisplay = ""
@@ -179,6 +207,9 @@ local function GetFormattedText(data, class, separator, tooltip)
         if WCLRT_Settings["TooltipRank"] == false then
             displayTextRank = ""
         end
+        if WCLRT_Settings["TooltipExp"] == false then
+            displayTextProgress = ""
+        end
     else
         if WCLRT_Settings["PaneAvgParse"] == false then
             displayTextParse = ""
@@ -189,6 +220,9 @@ local function GetFormattedText(data, class, separator, tooltip)
         if WCLRT_Settings["PaneRank"] == false then
             displayTextRank = ""
         end
+        if WCLRT_Settings["PaneExp"] == false then
+            displayTextProgress = ""
+        end
     end
 
     if displayTextParse == "" and displayTextStars == "" and displayTextRank == "" then
@@ -196,7 +230,7 @@ local function GetFormattedText(data, class, separator, tooltip)
     end
 
 
-    return string.format("%s %s%s%s", specDisplay, displayTextParse, displayTextStars, displayTextRank)
+    return string.format("%s %s%s%s%s", specDisplay, displayTextParse, displayTextStars, displayTextRank, displayTextProgress)
 end
 
 local function AddPlayerDataToTooltip(unit)
@@ -289,13 +323,15 @@ end
 local function UpdateSettingsWithDefaults()
     local defaultSettings = {
         TooltipAvgParse = true, -- or false
-        TooltipAllStars = true, -- or false
+        TooltipAllStars = false, -- or false
         TooltipRank = true, -- or false
         TooltipSpecDisplay = 1, -- or any other integer
+        TooltipExp = true, -- or false
         PaneAvgParse = true, -- or false
         PaneAllStars = true, -- or false
         PaneRank = true, -- or false
-        PaneSpecDisplay = 1 -- or any other integer
+        PaneSpecDisplay = 1, -- or any other integer
+        PaneExp = true, -- or false
     }
     -- Ensure WCLRT_Settings table exists
     if not WCLRT_Settings then
@@ -311,7 +347,29 @@ local function UpdateSettingsWithDefaults()
     end
 end
 
+local function GetPlayerRegion()
+    local realmList = GetCVar("portal")
+    if realmList then
+        realmList = string.lower(realmList)
+        if realmList == "us" then
+            return "US"
+        elseif realmList == "eu" then
+            return "EU"
+        elseif realmList == "kr" then
+            return "KR"
+        elseif realmList == "tw" then
+            return "TW"
+        else
+            return "Unknown"
+        end
+    end
+    return "Unknown"
+end
+
 thisRealm = GetRealmName()
+if GetPlayerRegion() == "EU" then
+    thisRealm = thisRealm .. "-EU"
+end
 wclData = PlayerDB[thisRealm]
 if not wclData then
     print('WCL Ranking Tooltip is not currently available on ' .. thisRealm ..  '. Contact the developer for more information. Discord: kikootwo')
@@ -422,8 +480,9 @@ panel:SetScript("OnShow", function()
         local tooltip_checkbox1 = CreateCheckbox(panel, "Show Average Parse Percentage in Tooltip", "tooltip_WCLRT-AvgParse", "TooltipAvgParse", tooltipGroupLabel, "TOPLEFT", "BOTTOMLEFT", 0, -15)
         local tooltip_checkbox2 = CreateCheckbox(panel, "Show All Stars in Tooltip", "tooltip_WCLRT-AllStars", "TooltipAllStars", tooltip_checkbox1, "TOPLEFT", "BOTTOMLEFT", 0, -5)
         local tooltip_checkbox3 = CreateCheckbox(panel, "Show Rank in Tooltip", "tooltip_WCLRT-Rank", "TooltipRank", tooltip_checkbox2, "TOPLEFT", "BOTTOMLEFT", 0, -5)
+        local tooltip_checkbox4 = CreateCheckbox(panel, "Show Exp in Tooltip", "tooltip_WCLRT-Exp", "TooltipExp", tooltip_checkbox3, "TOPLEFT", "BOTTOMLEFT", 0, -5)
 
-        local dropdown1 = CreateDropdown(panel, "tooltip_SpecDisplay", "TooltipSpecDisplay", tooltip_checkbox3, "TOPLEFT", "BOTTOMLEFT", 0, -10, {"Icon", "Text"}, "Tooltip Spec Display Options")
+        local dropdown1 = CreateDropdown(panel, "tooltip_SpecDisplay", "TooltipSpecDisplay", tooltip_checkbox4, "TOPLEFT", "BOTTOMLEFT", 0, -10, {"Icon", "Text"}, "Tooltip Spec Display Options")
 
         local paneGroupLabel = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         paneGroupLabel:SetPoint("TOPLEFT", dropdown1, "BOTTOMLEFT", 0, -20)
@@ -432,8 +491,10 @@ panel:SetScript("OnShow", function()
         local pane_checkbox1 = CreateCheckbox(panel, "Show Average Parse Percentage in Panes", "pane_WCLRT-AvgParse", "PaneAvgParse", paneGroupLabel, "TOPLEFT", "BOTTOMLEFT", 0, -15)
         local pane_checkbox2 = CreateCheckbox(panel, "Show All Stars in Panes", "pane_WCLRT-AllStars", "PaneAllStars", pane_checkbox1, "TOPLEFT", "BOTTOMLEFT", 0, -5)
         local pane_checkbox3 = CreateCheckbox(panel, "Show Rank in Panes", "pane_WCLRT-Rank", "PaneRank", pane_checkbox2, "TOPLEFT", "BOTTOMLEFT", 0, -5)
+        local pane_checkbox4 = CreateCheckbox(panel, "Show Exp in Panes", "pane_WCLRT-Exp", "PaneExp", pane_checkbox3, "TOPLEFT", "BOTTOMLEFT", 0, -5)
 
-        local dropdown2 = CreateDropdown(panel, "tooltip_SpecDisplay", "PaneSpecDisplay", pane_checkbox3, "TOPLEFT", "BOTTOMLEFT", 0, -10, {"Icon", "Text"}, "Pane Spec Display Options")
+
+        local dropdown2 = CreateDropdown(panel, "tooltip_SpecDisplay", "PaneSpecDisplay", pane_checkbox4, "TOPLEFT", "BOTTOMLEFT", 0, -10, {"Icon", "Text"}, "Pane Spec Display Options")
         firstLoad = false
     end
 end)
