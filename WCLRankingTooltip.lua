@@ -498,3 +498,27 @@ panel:SetScript("OnShow", function()
         firstLoad = false
     end
 end)
+
+-- Add a /wclwho command for searching outside local range and party/raid.
+
+local function WCLWhoCommand(msg, editbox)
+	local name = ""
+	local class = ""
+	local argNum = 0
+	  for arg in string.gmatch(msg, "%S+") do
+		argNum = argNum + 1
+		if argNum == 1 then name = arg end
+		if argNum == 2 then class = arg end
+	  end
+	
+	name = string.sub(name,1,1):upper() .. string.sub(name, 2, string.len(name)):lower() --force first character uppercase, rest lower for matching with database.
+	local data = wclData[name]
+	if data then
+		print(name .. ": " .. GetFormattedText(data, class:upper(), "  ", true))
+	else
+		print("Name not found in WCLRankingTooltip Database...")
+	end
+end
+
+SlashCmdList["WCLWHOTEST"] = WCLWhoCommand 
+SLASH_WCLWHOTEST1 = '/WCLWHO'
