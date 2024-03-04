@@ -1,10 +1,14 @@
-# CURRENTLY SUPPORTED SERVERS - US ONLY
+# CURRENTLY SUPPORTED SERVERS
 - **Classic Wrath - Benediction**
 - **Classic Wrath - Faerlina**
 - **SOD - Crusader Strike**
 - **SOD - Lone Wolf**
 - **SOD - Living Flame**
 - **SOD - Wild Growth**
+- **SOD - Crusader Strike-EU**
+- **SOD - Lone Wolf-EU**
+- **SOD - Living Flame-EU**
+- **SOD - Wild Growth-EU**
 
 # WCL Ranking Tooltip
 
